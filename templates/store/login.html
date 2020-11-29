@@ -1,0 +1,33 @@
+{% extends 'base/layout.html' %} {% block title %} Login {% endblock title %} {% block content %}
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-lg-5 mx-auto">
+            <h2 class="text-center bg-info text-white mb-3 p-2">Login Here</h2>
+            <form action="/store/login" method="post">
+                {% csrf_token %} {% if messages %} {% for message in messages %}
+                <div class="alert alert-danger">
+
+                    <strong>{{message}}</strong>
+
+                </div>
+
+                {% endfor %} {% endif %}
+
+                <div class="form-group">
+
+                    <label for="id_email">Email: </label>
+                    <input type="email" name="email" id="id_email" class="form-control" placeholder="Enter Your email address" required>
+                </div>
+                <div class="form-group">
+                    <label for="id_password">Password:</label>
+                    <input type="password" name="password" id="id_password" class="form-control" placeholder="Enter Your Password" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="form-control btn btn-success">Login</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

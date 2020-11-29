@@ -1,0 +1,66 @@
+{% extends 'base/layout.html' %} {% block title %} Store {% endblock title %} {% block content %} {% load static %} {% load cart %}
+<div class="container-fluid p-2">
+
+    <div class="row ">
+
+        <div class="col-lg-2">
+            <div class="list-group text-center">
+                <a href="/store/" class="list-group-item list-group-item-action">All Category</a> {% for c in category %}
+                <a href="/store/{{c.id}}/category_filter" class="list-group-item list-group-item-action">{{c}}</a> {% endfor %}
+
+            </div>
+        </div>
+        <div class="col-lg-10 ">
+            <div class="row container-fluid mx-auto">
+                {% for p in product %}
+                <div class="card" id={{p.id}} style="width: 18rem; margin-bottom: 10px; margin-left: 10px;">
+                    <img src="{% static p.image.url %}" class="card-img-top" alt="card cap">
+                    <div class="card-body">
+                        <h5 class="card-title">{{p.name}}</h5>
+                        <p class="card-text">Rs. {{p.price}}</p>
+                        <!-- {{p | is_in_cart:request.session.cart }} -->
+
+                    </div>
+                    <div class="card-footer p-0">
+
+                        {% if p|is_in_cart:request.session.cart %}
+                        <div class="row no-gutters">
+                            <form action="/store/#{{p.id}}" method="POST" class="col-2">
+                                {% csrf_token %}
+                                <input hidden type="text" value="True" name="remove">
+                                <input hidden type="text" value="{{p.id}}" name="product_id">
+                                <input type="submit" class="btn btn-secondary" value="-">
+                            </form>
+                            <div class="col text-center text-muted">
+                                {{p | cart_quantity:request.session.cart}} in Cart
+                            </div>
+                            <form action="/store/#{{p.id}}" method="POST" class="col-2">
+                                {% csrf_token %}
+                                <input hidden type="text" value="{{p.id}}" name="product_id">
+                                <input type="submit" class="btn btn-secondary" value="+">
+                            </form>
+                        </div>
+                        {% else %}
+                        <form action="/store/#{{p.id}}" method="POST">
+                            {% csrf_token %}
+                            <input hidden type="text" value="{{p.id}}" name="product_id">
+                            <input type="submit" class="btn btn-sm btn-light form-control" value="Add cart">
+                        </form>
+                        {% endif %}
+
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+    <!-- <div class="jumbotron" id="abc">
+        <h1 class="display-4">Hello, world!</h1>
+        <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
+        <hr class="my-4">
+        <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+        <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+    </div> -->
+</div>
+{% endblock content %}
